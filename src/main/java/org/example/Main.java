@@ -6,6 +6,7 @@ import MostrarRegistros_3.PrintRecord;
 import BuscarRegistros_4.SearchRecord;
 import ActualizarSalarios_5.UpdateSalary;
 import EliminarEmpleado_6.DeleteWorker;
+import Transacciones_08.Transaction;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -16,7 +17,8 @@ public class Main {
         MySQLConnection mySQLConnection = new MySQLConnection();
         Connection connection = mySQLConnection.getConnection();
 
-        System.out.println("SELECCIONE LA OPERACION:\n1. INSERTAR EMPLEADO\n2. MOSTRAR PRODUCTOS\n3. BUSCAR PRODUCTO\n4. ACTUALIZAR SALARIO\n5. ELIMINAR EMPLEADO");
+        System.out.println("SELECCIONE LA OPERACION:" +
+                "\n1. INSERTAR EMPLEADO\n2. MOSTRAR PRODUCTOS\n3. BUSCAR PRODUCTO\n4. ACTUALIZAR SALARIO\n5. ELIMINAR EMPLEADO\n6.REALIZAR TRANSFERENCIA");
         System.out.print("OPCION: ");
         int op = scanner.nextInt();
         scanner.nextLine();
@@ -36,6 +38,9 @@ public class Main {
                 break;
             case 5:
                 eliminarEmpleado(connection, scanner);
+                break;
+            case 6:
+                realizarTransaccion(connection, scanner);
                 break;
             default:
                 System.out.println("NO HA ELEGIDO NINGUNA OPCIÓN VÁLIDA");
@@ -114,6 +119,26 @@ public class Main {
         DeleteWorker deleteWorker = new DeleteWorker();
 
         boolean exito = deleteWorker.eliminar(connection, idEmpleado);
+    }
+
+    private static void realizarTransaccion(Connection connection, Scanner scanner){
+
+        System.out.print("Ingrese el id de la cuenta a la cual desea debitar dinero: ");
+        int idOrigen = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Ingrese el id de la cuenta a la cual desea acreditar dinero: ");
+        int idDestino = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Ingrese el monto a transferir: ");
+        double monto = scanner.nextDouble();
+        scanner.nextLine();
+
+        Transaction transaction = new Transaction();
+
+        boolean exito = transaction.transferirDinero(connection, idOrigen, idDestino, monto);
+
     }
 }
 
