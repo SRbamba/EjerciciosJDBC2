@@ -2,33 +2,34 @@ package dao;
 
 import java.sql.*;
 
-public class ProductoDao {
-    public boolean insertarProducto(Connection connection, String nombre, double precio, int stock){
-        String query = "INSERT INTO productos (nombre, precio, stock) values (?,?,?) ";
+public class ClienteDao {
+    public boolean insertar(Connection connection, String nombre, String direccion, String telefono, String email){
+        String query = "INSERT INTO clientes (nombre, direccion, telefono, email) values (?,?,?,?) ";
 
         //Creacion de la consulta query al servidor y luego pasan los datos del producto a la query con sus respectivos indices
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
 
             preparedStatement.setString(1, nombre);
-            preparedStatement.setDouble(2, precio);
-            preparedStatement.setInt(3, stock);
+            preparedStatement.setString(2, direccion);
+            preparedStatement.setString(3, telefono);
+            preparedStatement.setString(4, email);
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
             }
-            System.out.println("Se inserto un producto correctamente");
+            System.out.println("Se inserto un cliente correctamente");
             return true;
         } catch (SQLException ex){
-            System.out.print("Error, no se pudo insertar el producto: " + ex.getMessage());
+            System.out.print("Error, no se pudo insertar el cliente: " + ex.getMessage());
         }
         return false;
     }
 
     public boolean eliminar(Connection connection, int id){
-        String query = "DELETE FROM productos WHERE id = ?";
+        String query = "DELETE FROM clientes WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 
@@ -42,86 +43,86 @@ public class ProductoDao {
             }
 
             else {
-                System.out.println("No se pudo eliminar el producto con ese id");
+                System.out.println("No se pudo eliminar el cliente con ese id");
             }
 
         } catch (SQLException ex){
-            System.out.println("Error al eliminar el producto: " + ex.getMessage());
+            System.out.println("Error al eliminar el cliente: " + ex.getMessage());
         }
         return false;
     }
 
-    public boolean actualizarPrecioProducto(Connection connection, int id, double precio){
-        String query = "UPDATE productos SET precio = ? WHERE id = ?";
+    public boolean actualizarDireccion(Connection connection, int id, String direccion){
+        String query = "UPDATE clientes SET direccion = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 
-            preparedStatement.setDouble(1, precio);
+            preparedStatement.setString(1, direccion);
             preparedStatement.setInt(2, id);
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0){
-                System.out.println("Actualizacion del producto exitosa");
+                System.out.println("Actualizacion del cliente exitosa");
             } else {
-                System.out.println("No se encontro ningun producto con ese id");
+                System.out.println("No se encontro ningun cliente con ese id");
             }
 
             return true;
         } catch (SQLException ex){
-            System.out.println("Error al intentar actualizar el precio del prodcuto: " + ex.getMessage());
+            System.out.println("Error al intentar actualizar el domicilio del cliente: " + ex.getMessage());
         }
 
         return false;
     }
 
-    public boolean actualizarStockProducto(Connection connection, int id, int stock){
-        String query = "UPDATE productos SET stock = ? WHERE id = ?";
+    public boolean actualizarTelefono(Connection connection, int id, String telefono){
+        String query = "UPDATE clientes SET telefono = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 
-            preparedStatement.setInt(1, stock);
+            preparedStatement.setString(1, telefono);
             preparedStatement.setInt(2, id);
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0){
-                System.out.println("Actualizacion del producto exitosa");
+                System.out.println("Actualizacion del cliente exitosa");
             } else {
-                System.out.println("No se encontro ningun producto con ese id");
+                System.out.println("No se encontro ningun cliente con ese id");
             }
 
             return true;
         } catch (SQLException ex){
-            System.out.println("Error al intentar actualizar el precio del producto: " + ex.getMessage());
+            System.out.println("Error al intentar actualizar el telefono del cliente: " + ex.getMessage());
         }
 
         return false;
     }
 
-    public boolean actualizarNombreProducto(Connection connection, int id, String nombre){
-        String query = "UPDATE productos SET nombre = ? WHERE id = ?";
+    public boolean actualizarEmail(Connection connection, int id, String email){
+        String query = "UPDATE clientes SET email = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 
-            preparedStatement.setString(1, nombre);
+            preparedStatement.setString(1, email);
             preparedStatement.setInt(2, id);
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0){
-                System.out.println("Actualizacion del producto exitosa");
+                System.out.println("Actualizacion del cliente exitosa");
             } else {
-                System.out.println("No se encontro ningun producto con ese id");
+                System.out.println("No se encontro ningun cliente con ese id");
             }
 
             return true;
         } catch (SQLException ex){
-            System.out.println("Error al intentar actualizar el precio del producto: " + ex.getMessage());
+            System.out.println("Error al intentar actualizar el email del cliente: " + ex.getMessage());
         }
 
         return false;
     }
 
-    public boolean listarProducto(Connection connection){
-        String query = "SELECT * FROM productos";
+    public boolean listar(Connection connection){
+        String query = "SELECT * FROM clientes";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
             ResultSet resultSets = preparedStatement.executeQuery();
@@ -129,8 +130,9 @@ public class ProductoDao {
                 System.out.println(
                         resultSets.getInt("id") + " | " +
                                 resultSets.getString("nombre") + " | " +
-                                resultSets.getDouble("precio") + " | " +
-                                resultSets.getInt("stock")
+                                resultSets.getString("direccion") + " | " +
+                                resultSets.getString("telefono") + " | " +
+                                resultSets.getString("email")
                 );
             }
             return true;
