@@ -1,4 +1,4 @@
-package ActualizarSalarios_5;
+package service.ActualizarSalarios_5;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

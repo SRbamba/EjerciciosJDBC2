@@ -1,12 +1,18 @@
-package org.example;
+import dao.InsertarProductoDao;
+import util.MySQLConnection;
+import service.InsertarRegistros_2.InsertRecord;
+import service.MostrarRegistros_3.PrintRecord;
+import service.BuscarRegistros_4.SearchRecord;
+import service.ActualizarSalarios_5.UpdateSalary;
+import service.EliminarEmpleado_6.DeleteWorker;
+import service.Transacciones_08.Transaction;
 
-import Conexion_1.MySQLConnection;
-import InsertarRegistros_2.InsertRecord;
-import MostrarRegistros_3.PrintRecord;
-import BuscarRegistros_4.SearchRecord;
-import ActualizarSalarios_5.UpdateSalary;
-import EliminarEmpleado_6.DeleteWorker;
-import Transacciones_08.Transaction;
+//METODOS DAO
+import dao.InsertarProductoDao;
+import dao.EliminarProductoDao;
+import dao.ListarProductoDao;
+import dao.ActualizarProductoDao;
+/////////////
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -44,6 +50,28 @@ public class Main {
                 break;
             default:
                 System.out.println("NO HA ELEGIDO NINGUNA OPCIÓN VÁLIDA");
+                break;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        System.out.println("SELECCIONE LA OPERACION:" + "\n1. INSERTAR PRODUCTO\n2. ELIMINAR PRODUCTOS\n3. ACTUALIZAR PRODUCTO\n4. LISTAR PRODUCTOS");
+        System.out.print("OPCION: ");
+        op = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (op){
+            case 1:
+                insertarProducto(connection, scanner);
+                break;
+            case 2:
+                eliminarProducto(connection, scanner);
+                break;
+            case 3:
+                actualizarProducto(connection, scanner);
+                break;
+            case 4:
+                listarProductos(connection);
                 break;
         }
 
@@ -140,6 +168,76 @@ public class Main {
         boolean exito = transaction.transferirDinero(connection, idOrigen, idDestino, monto);
 
     }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static void insertarProducto(Connection connection, Scanner scanner){
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
+
+        System.out.print("Precio: ");
+        double precio = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Stock: ");
+        int stock = scanner.nextInt();
+        scanner.nextLine();
+
+        InsertarProductoDao insertarProductoDao = new InsertarProductoDao();
+        boolean exito = insertarProductoDao.insertarProducto(connection, nombre, precio, stock);
+    }
+
+    public static void eliminarProducto(Connection connection, Scanner scanner){
+        System.out.print("Ingrese el id del producto al cual desea eliminar: ");
+        int idProducto = scanner.nextInt();
+        scanner.nextLine();
+
+        EliminarProductoDao eliminarProductoDao = new EliminarProductoDao();
+
+        boolean exito = eliminarProductoDao.eliminar(connection, idProducto);
+    }
+
+    public static void actualizarProducto(Connection connection, Scanner scanner){
+        System.out.print("Ingrese el id del producto que desea modificar: ");
+        int idProducto = scanner.nextInt();
+        scanner.nextLine();
+
+        ActualizarProductoDao actualizarProductoDao = new ActualizarProductoDao();
+
+        System.out.println("SELECCIONE UNA OPCION:\n1. MODIFICAR NOMBRE\n2. MODIFICAR PRECIO\n3. MODIFICAR STOCK");
+        System.out.print("OPCION: ");
+        int op = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (op){
+            case 1:
+                System.out.print("Ingrese el nuevo nombre del producto: ");
+                String nombreNuevo = scanner.nextLine();
+                    actualizarProductoDao.actualizarNombreProducto(connection, idProducto, nombreNuevo);
+                break;
+            case 2:
+                System.out.print("Ingrese el nuevo precio del producto: ");
+                double precioNuevo = scanner.nextDouble();
+                scanner.nextLine();
+                actualizarProductoDao.actualizarPrecioProducto(connection, idProducto, precioNuevo);
+                break;
+            case 3:
+                System.out.print("Ingrese el nuevo stock del producto: ");
+                int stockNuevo = scanner.nextInt();
+                scanner.nextLine();
+                actualizarProductoDao.actualizarStockProducto(connection, idProducto, stockNuevo);
+                break;
+            default:
+                System.out.println("No se ingreso ninguna opcion disponible");
+                break;
+        }
+    }
+
+    public static void listarProductos(Connection connection){
+        ListarProductoDao listarProductoDao = new ListarProductoDao();
+        listarProductoDao.listarProducto(connection);
+    }
 }
+
 
 

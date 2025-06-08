@@ -1,4 +1,4 @@
-package BuscarRegistros_4;
+package service.BuscarRegistros_4;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

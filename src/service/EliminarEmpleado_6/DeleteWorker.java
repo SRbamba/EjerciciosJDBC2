@@ -1,4 +1,4 @@
-package EliminarEmpleado_6;
+package service.EliminarEmpleado_6;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

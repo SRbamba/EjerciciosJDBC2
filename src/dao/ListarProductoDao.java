@@ -1,14 +1,15 @@
-package MostrarRegistros_3;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PrintRecord {
-    public boolean mostrar(Connection connection){
-    String request = "select * from productos";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(request)){
+public class ListarProductoDao {
+    public boolean listarProducto(Connection connection){
+        String query = "SELECT * FROM productos";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
             ResultSet resultSets = preparedStatement.executeQuery();
             while (resultSets.next()) {
                 System.out.println(
@@ -22,6 +23,8 @@ public class PrintRecord {
         } catch (SQLException e){
             e.getMessage();
         }
+
         return false;
     }
+
 }

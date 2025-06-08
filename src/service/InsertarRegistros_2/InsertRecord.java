@@ -1,4 +1,4 @@
-package InsertarRegistros_2;
+package service.InsertarRegistros_2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
